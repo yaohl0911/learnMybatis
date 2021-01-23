@@ -15,7 +15,10 @@ public class TestDriver {
     public void getUserListTest() {
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        List<User> userList = userMapper.getUserList();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("startIndex", 0);
+        map.put("pageSize", 2);
+        List<User> userList = userMapper.getUserList(map);
         for (User user : userList) {
             System.out.println(user);
         }

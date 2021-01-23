@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface UserMapper {
     // 获取全部数据
-    List<User> getUserList();
+    List<User> getUserList(Map<String, Object> map);
 
     //根据id查询数据
     User getUserByID(int id);

@@ -282,11 +282,6 @@ public class TestDriver {
 }
 ```
 
-整体工程如下图所示：
-
-![image-20210116211448233](/Users/yaohailiang/Library/Application Support/typora-user-images/image-20210116211448233.png)
-
-
 
 ## Map和模糊查询扩展
 
@@ -401,13 +396,11 @@ password=123456
 
 
 
-# 日志
+# 日志工厂
 
-### 日志工厂
+定位的好手段。
 
-定位的好手段
-
-![image-20210123114014097](/Users/yaohailiang/Library/Application%20Support/typora-user-images/image-20210123114014097.png)
+Mybatis支持的日志类型：
 
 SLF4J 
 
@@ -425,7 +418,7 @@ NO_LOGGING
 
 在Mybatis具体使用哪一个，在设置中配置，默认未设置
 
-使用STDOUT_LOGGING
+## 使用STDOUT_LOGGING
 
 ```xml
 <settings>
@@ -433,7 +426,7 @@ NO_LOGGING
 </settings>
 ```
 
-使用LOG4J
+## 使用LOG4J
 
 ```xml
 <settings>
@@ -479,4 +472,24 @@ log4j.logger.java.sql.PreparedStatement = DEBUG
 ```
 
 
+
+# 分页
+
+作用：减少数据的处理量
+
+## 使用limite实现分页
+
+```sql
+SELECT * FROM user limite startIndex,pageSize;
+```
+
+## 使用Mybatis实现分分页
+
+使用前面学的map实现：
+
+```xml
+<select id="getUserList" resultType="user">
+    select * from mybatis.users limit #{startInde}, #{pageSize};
+</select>
+```
 
