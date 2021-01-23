@@ -483,7 +483,7 @@ log4j.logger.java.sql.PreparedStatement = DEBUG
 SELECT * FROM user limite startIndex,pageSize;
 ```
 
-## 使用Mybatis实现分分页
+## 使用Mybatis实现分页
 
 使用前面学的map实现：
 
@@ -493,3 +493,6 @@ SELECT * FROM user limite startIndex,pageSize;
 </select>
 ```
 
+## 使用RowBounds实现分页
+
+不推荐使用
