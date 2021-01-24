@@ -302,7 +302,7 @@ public class TestDriver {
 ```
 
 ```java
-	  @Test
+		@Test
     public void getUserLikeTest() {
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
