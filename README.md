@@ -1,3 +1,11 @@
+Mybatis01：Mybatis的常见用法
+
+Mybatis02：Mybatis的常见用法 + 配置文件
+
+Mybatis03：Mybatis的常见用法 + 配置文件 + 日志
+
+可以直接看Mybatis03
+
 
 
 教程链接：https://www.bilibili.com/video/BV1NE411Q7Nx?p=7
@@ -185,23 +193,26 @@ Mapper配置
 <mapper namespace="com.yaohl0911.dao.UserMapper">
 
     <select id="getUserList" resultType="com.yaohl0911.pojo.User">
-        select * from mybatis.users;
+        SELECT * FROM mybatis.users;
     </select>
 
     <select id="getUserByID" parameterType="int" resultType="com.yaohl0911.pojo.User">
-        select * from mybatis.users where id=#{id};
+        SELECT * FROM mybatis.users WHERE id=#{id};
+    </select>
+    <select id="getUserLike" resultType="com.yaohl0911.pojo.User">
+        SELECT * FROM mybatis.users WHERE name LIKE #{valus};
     </select>
 
     <insert id="addUser" parameterType="com.yaohl0911.pojo.User">
-        insert into mybatis.users (id, name, age) values (#{id}, #{name}, #{age});
+        INSERT INTO mybatis.users (id, name, age) VALUE (#{id}, #{name}, #{age});
     </insert>
 
     <update id="updateUser" parameterType="com.yaohl0911.pojo.User">
-        update mybatis.users set name=#{name}, age=#{age} where id=#{id};
+        UPDATE mybatis.users SET name=#{name}, age=#{age} WHERE id=#{id};
     </update>
 
     <delete id="deleteUser" parameterType="int">
-        delete from mybatis.users where id=#{id};
+        DELETE FROM mybatis.users WHERE id=#{id};
     </delete>
 </mapper>
 ```
@@ -317,7 +328,7 @@ public void getUserLikeTest() {
 
 ##  属性优化
 
-属性配置文件`sqlconfig.properties`    注：文件名随意
+属性配置文件`sqlconfig.properties`，以`key=value`的形式存储，文件名随意
 
 ```properties
 driver=com.mysql.cj.jdbc.Driver
@@ -334,9 +345,11 @@ password=123456
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+  <!-- 设置属性，可以在配置文件中设置，也可以在这里设置 -->
     <properties resource="sqlconfig.properties">
-    		<!-- 这里也可以写一部分配置 -->
+    		<!-- 除了properties文件中可以写配置之外，这里也可以写一部分配置 -->
     </properties>
+    <!-- 环境可以配置多套，default处选择使用哪套配置 -->
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
@@ -348,13 +361,14 @@ password=123456
             </dataSource>
         </environment>
     </environments>
+    <!-- -->
     <mappers>
         <mapper resource="com/yaohl0911/dao/UserMapper.xml"/>
     </mappers>
 </configuration>
 ```
 
-注意，如果在`sqlconfig.properties`和<properties resource="sqlconfig.properties"></properties>里都设置了某个字段，配置文件优先生效。
+注意，如果在`sqlconfig.properties`和<properties resource="sqlconfig.properties"></properties>里同时设置了某个字段，配置文件优先生效。
 
 ## 别名配置
 
@@ -374,11 +388,11 @@ password=123456
 
 ```xml
 <typeAliases>
-  <package name="com.yaohl0911.pojo"/>
+    <package name="com.yaohl0911.pojo"/>
 </typeAliases>
 ```
 
-直接指定别名可以比较灵活的用任意别名，扫描包的方式不行，但是扫描包的方式可以用用注解实现。
+直接指定别名可以比较灵活的用任意别名，扫描包的方式不行，但是扫描包的方式可以用注解实现。
 
 ## 映射器配置
 
