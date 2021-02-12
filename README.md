@@ -1,3 +1,5 @@
+
+
 教程链接：https://www.bilibili.com/video/BV1NE411Q7Nx?p=7
 
 # 初识Mybatis
@@ -33,30 +35,30 @@ INSERT INTO users(id, name, age) VALUES(3, 'ccc', 2);
 注意需要把资源文件所在的目录加入到资源文件扫面路径，否则找不到资源文件。
 
 ```xml
-    <build>
-        <!--
-         Maven约定大于配置，默认只包含src/main/resources下的资源文件
-         想要包含其他路径下的资源文件，需要修改Maven配置把对应的路径加进来
-         -->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-    </build>
+<build>
+    <!--
+     Maven约定大于配置，默认只包含src/main/resources下的资源文件
+     想要包含其他路径下的资源文件，需要修改Maven配置把对应的路径加进来
+     -->
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.xml</include>
+            </includes>
+            <filtering>true</filtering>
+        </resource>
+        <resource>
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.xml</include>
+            </includes>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
+</build>
 ```
 
 
@@ -73,7 +75,7 @@ INSERT INTO users(id, name, age) VALUES(3, 'ccc', 2);
 
 ### Mybatis方式的思路
 
-按照Mybatis官方教程的思路，要一Mybatis实现，首先要实现SqlSessionFactory和SqlSession等，由于是公共代码，所以提炼成一个Utils工具
+按照Mybatis官方教程的思路，要以Mybatis实现，首先要实现SqlSessionFactory和SqlSession等，由于是公共代码，所以提炼成一个Utils工具
 
 ```java
 package com.yaohl0911.utils;
@@ -142,12 +144,6 @@ public class User {
     private int id;
     private String name;
     private int age;
-
-    public User(int id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
 }
 ```
 
@@ -296,23 +292,23 @@ public class TestDriver {
 ### 模糊查找
 
 ```xml
-    <select id="getUserLike" resultType="com.yaohl0911.pojo.User">
-        select * from mybatis.users where name like #{valus};
-    </select>
+<select id="getUserLike" resultType="com.yaohl0911.pojo.User">
+    select * from mybatis.users where name like #{valus};
+</select>
 ```
 
 ```java
-		@Test
-    public void getUserLikeTest() {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        List<User> userList= userMapper.getUserLike("%d%"); // sql代码执行的时候，传递通配符"% %"
-        for (User user : userList) {
-            System.out.println(user);
-        }
-
-        sqlSession.close();
+@Test
+public void getUserLikeTest() {
+    SqlSession sqlSession = MybatisUtils.getSqlSession();
+    UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+    List<User> userList= userMapper.getUserLike("%d%"); // sql代码执行的时候，传递通配符"% %"
+    for (User user : userList) {
+        System.out.println(user);
     }
+
+    sqlSession.close();
+}
 ```
 
 
@@ -323,7 +319,7 @@ public class TestDriver {
 
 属性配置文件`sqlconfig.properties`    注：文件名随意
 
-```xml
+```properties
 driver=com.mysql.cj.jdbc.Driver
 url=jdbc:mysql://localhost:3306/mybatis
 username=root
@@ -428,22 +424,15 @@ NO_LOGGING
 
 ## 使用LOG4J
 
+Mybatis-config.xml增加配置：
+
 ```xml
 <settings>
     <setting name="logImpl" value="LOG4J"/>
-</settings>
+</settings>__
 ```
 
-```xml
-    <dependencies>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.12</version>
-        </dependency>
-    </dependencies>
-```
-
+logconfig.properties配置文件 注：文件名任意
 ```properties
 # 将等级为DEBUG的日志信息输出到console和file这两个目的地
 log4j.rootLogger = DEBUG,console,file
@@ -477,7 +466,7 @@ log4j.logger.java.sql.PreparedStatement = DEBUG
 
 作用：减少数据的处理量
 
-## 使用limite实现分页
+## 使用SQL的limite实现分页
 
 ```sql
 SELECT * FROM user limite startIndex,pageSize;
