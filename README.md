@@ -361,7 +361,7 @@ password=123456
             </dataSource>
         </environment>
     </environments>
-    <!-- -->
+    <!-- 每一个mapper.xml都需要在Mybatis核心配置文件中注册 -->
     <mappers>
         <mapper resource="com/yaohl0911/dao/UserMapper.xml"/>
     </mappers>
