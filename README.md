@@ -555,6 +555,29 @@ log4j.logger.java.sql.PreparedStatement = DEBUG
 
 ### 一对多查询
 
+```sql
+CREATE DATABASE `mybatis`; 
+
+USE `mybatis`;
+
+CREATE TABLE `student`(
+	id INT NOT NULL PRIMARY KEY,
+	name VARCHAR(30) DEFAULT NULL,
+	tid INT NOT NULL
+);
+
+INSERT INTO `student` (id, name, tid) VALUES(1, 's1', 1);
+INSERT INTO `student` (id, name, tid) VALUES(2, 's2', 1);
+INSERT INTO `student` (id, name, tid) VALUES(3, 's3', 1);
+
+CREATE TABLE `teacher`(
+	id INT NOT NULL PRIMARY KEY,
+	name VARCHAR(30) DEFAULT NULL,
+);
+
+INSERT INTO `teacher` (id, name) VALUES(1, 't1');
+```
+
 
 
 ### 多对一查询
