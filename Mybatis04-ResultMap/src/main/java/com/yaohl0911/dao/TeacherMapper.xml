@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaohl0911.dao.TeacherMapper">
+
+    <select id="getTeacherById" parameterType="int" resultType="teacher">
+        select * from mybatis.teacher where id=#{id}
+    </select>
+
+    <select id="getTeacherNameById" parameterType="int" resultType="string">
+        select name from mybatis.teacher where id=#{id}
+    </select>
+</mapper>

@@ -1,12 +1,12 @@
 package com.yaohl0911.pojo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-@AllArgsConstructor
-public class User {
+public class Teacher {
     private int id;
     private String name;
-    private int age;
+    private List<String> students;
 }

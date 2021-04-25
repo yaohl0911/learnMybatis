@@ -1,12 +1,11 @@
 package com.yaohl0911.pojo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class User {
+public class Student {
     private int id;
     private String name;
-    private int age;
+//    private Teacher teacher;
+    private String tname;
 }

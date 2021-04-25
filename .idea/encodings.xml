@@ -7,5 +7,9 @@
     <file url="file://$PROJECT_DIR$/Mybatis02/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Mybatis03/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Mybatis03/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Mybatis04-ResultMap/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Mybatis04-ResultMap/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Mybatis04-ResultMap2/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Mybatis04-ResultMap2/src/main/resources" charset="UTF-8" />
   </component>
 </project>

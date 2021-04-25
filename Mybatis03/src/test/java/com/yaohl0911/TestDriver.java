@@ -29,7 +29,7 @@ public class TestDriver {
     public void getUserByIDTest() {
         SqlSession sqlSession = MybatisUtils.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        User user = userMapper.getUserByID(1);
+        User user = userMapper.getUserById(1);
         System.out.println("Add user: " + user.toString());
         sqlSession.close();
     }

@@ -8,7 +8,7 @@
         SELECT * FROM mybatis.users LIMIT #{startIndex}, #{pageSize};
     </select>
 
-    <select id="getUserByID" parameterType="int" resultType="com.yaohl0911.pojo.User">
+    <select id="getUserById" parameterType="int" resultType="com.yaohl0911.pojo.User">
         SELECT * FROM mybatis.users WHERE id=#{id};
     </select>
     <select id="getUserLike" resultType="com.yaohl0911.pojo.User">

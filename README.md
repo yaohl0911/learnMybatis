@@ -16,7 +16,7 @@ Mybatis03：Mybatis的常见用法 + 配置文件 + 日志
 
 
 
-## 搭建Mysql环境
+## 搭建MySQL环境
 
 ```sql
 CREATE DATABASE `mybatis`; 
@@ -71,7 +71,7 @@ INSERT INTO users(id, name, age) VALUES(3, 'ccc', 2);
 
 
 
-## 编写代码
+## Mybatis的基本应用
 
 ### JDBC方式的思路
 
@@ -83,7 +83,7 @@ INSERT INTO users(id, name, age) VALUES(3, 'ccc', 2);
 
 ### Mybatis方式的思路
 
-按照Mybatis官方教程的思路，要以Mybatis实现，首先要实现SqlSessionFactory和SqlSession等，由于是公共代码，所以提炼成一个Utils工具
+按照Mybatis官方教程的思路，要用Mybatis实现，首先要实现SqlSessionFactory和SqlSession等，由于是公共代码，所以提炼成一个Utils工具
 
 ```java
 package com.yaohl0911.utils;
@@ -155,7 +155,7 @@ public class User {
 }
 ```
 
-接口
+Mapper接口
 
 ```java
 package com.yaohl0911.dao;
@@ -290,17 +290,84 @@ public class TestDriver {
 ```
 
 
-## Map和模糊查询扩展
+## Map的使用
 
-### map比较容易定制化
+使用map的方式无论是作为parameterType还是作为resultType，都比较容易定制
 
 - 使用map可以方便地自定义字段
 
-- 多个参数时用map或者注解比较方便
+  Mapper配置
+
+  ```xml
+  <insert id="addUser" parameterType="map">
+    INSERT INTO mybatis.users (id, name, age) VALUES (#{ID}, #{NAME}, #{AGE});
+  </insert>
+  ```
+
+  Mapper接口
+
+  ```java
+  // 插入一条数据
+  int addUser(Map<String, Object> map);
+  ```
+
+  测试代码
+
+  ```java
+      @Test
+      public void addUserTest() {
+          SqlSession sqlSession = MybatisUtils.getSqlSession();
+          UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+          Map<String, Object> map = new HashMap<String, Object>();
+          map.put("ID", 4);   // 这样就可以更方便地自定义字段了
+          map.put("NAME", "dd2");
+          map.put("AGE", 2);
+          int res = userMapper.addUser(map);
+          if(res != 0) {
+              System.out.println("Add user succeed.");
+          }
+          sqlSession.commit();
+          sqlSession.close();
+      }
+  ```
+
+- 多个参数时用map比较方便
+
+  Mapper配置
+
+    ```xml
+      <select id="getUserList"  parameterType="map" resultType="user">
+          SELECT * FROM mybatis.users LIMIT #{startIndex}, #{pageSize};
+      </select>
+    ```
+
+  Mapper接口
+
+  ```java
+  		// 获取全部限制范围内的全部数据
+    	List<User> getUserList(Map<String, Object> map);
+  ```
+
+  测试代码
+
+  ```java
+      @Test
+      public void getUserListTest() {
+          SqlSession sqlSession = MybatisUtils.getSqlSession();
+          UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+          Map<String, Object> map = new HashMap<String, Object>();
+          map.put("startIndex", 0);
+          map.put("pageSize", 2);
+          List<User> userList = userMapper.getUserList(map);
+          for (User user : userList) {
+              System.out.println(user);
+          }
+          sqlSession.close();
+      }
+  ```
 
 
-
-### 模糊查找
+## 模糊查找
 
 ```xml
 <select id="getUserLike" resultType="com.yaohl0911.pojo.User">
@@ -368,7 +435,7 @@ password=123456
 </configuration>
 ```
 
-注意，如果在`sqlconfig.properties`和<properties resource="sqlconfig.properties"></properties>里同时设置了某个字段，配置文件优先生效。
+注意：如果在`sqlconfig.properties`和<properties resource="sqlconfig.properties"></properties>里同时设置了某个字段，配置文件优先生效。
 
 ## 别名配置
 
@@ -398,15 +465,7 @@ password=123456
 
 
 
-
-
-# ResultMap
-
-结果集映射，解决属性名和字段名不一致的问题
-
-
-
-# 日志工厂
+# 日志配置
 
 定位的好手段。
 
@@ -476,17 +535,63 @@ log4j.logger.java.sql.PreparedStatement = DEBUG
 
 
 
-# 分页
+# Mybatis进阶
+
+## ResultMap
+
+### 基本用法
+
+结果集映射，最基本的应用是解决属性名和字段名不一致的问题
+
+```xml
+    <resultMap id="userMap" type="com.yaohl0911.pojo.User">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/> 
+        <result column="nianling" property="age"/>  <!-- pojo中是age，db中是拼音，使用resultMap做映射;前边两行是一样的。不需要映射，不写也行。 -->
+    </resultMap>
+```
+
+
+
+### 一对多查询
+
+
+
+### 多对一查询
+
+
+
+- 按照查询嵌套处理
+
+```java
+
+```
+
+
+
+
+
+- 按照结果嵌套处理
+
+
+
+
+
+
+
+
+
+## 分页的实现
 
 作用：减少数据的处理量
 
-## 使用SQL的limite实现分页
+### 使用SQL的limite实现分页
 
 ```sql
-SELECT * FROM user limite startIndex,pageSize;
+SELECT * FROM user limite startIndex, pageSize;
 ```
 
-## 使用Mybatis实现分页
+### 使用Mybatis实现分页
 
 使用前面学的map实现：
 
@@ -496,6 +601,11 @@ SELECT * FROM user limite startIndex,pageSize;
 </select>
 ```
 
-## 使用RowBounds实现分页
+### 使用RowBounds实现分页
 
 不推荐使用
+
+
+
+## sql内联查询
+

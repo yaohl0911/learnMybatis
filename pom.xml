@@ -12,6 +12,8 @@
         <module>Mybatis01</module>
         <module>Mybatis02</module>
         <module>Mybatis03</module>
+        <module>Mybatis04-ResultMap</module>
+        <module>Mybatis04-ResultMap2</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -8,7 +8,7 @@
         <setting name="logImpl" value="LOG4J"/>
     </settings>
     <typeAliases>
-        <typeAlias type="com.yaohl0911.pojo.User" alias="user" ></typeAlias>
+<!--        <typeAlias type="com.yaohl0911.pojo.Teacher" alias="teacher" ></typeAlias>-->
         <package name="com.yaohl0911.pojo"/>
     </typeAliases>
     <environments default="development">
@@ -23,6 +23,7 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="com/yaohl0911/dao/UserMapper.xml"/>
+        <mapper resource="com/yaohl0911/dao/StudentMapper.xml"/>
+        <mapper resource="com/yaohl0911/dao/TeacherMapper.xml"/>
     </mappers>
 </configuration>
