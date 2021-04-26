@@ -21,9 +21,10 @@
             s.name as sname,
             t.name as tname
         FROM
-             mybatis.student s, mybatis.teacher t
+             mybatis.student s
+             left join mybatis.teacher t on s.tid = t.id
         WHERE
-              s.id=#{id} and s.tid=t.id;
+              s.id=#{id};
     </select>
     <resultMap id="StudentMap2" type="student">
         <result property="id" column="sid"/>

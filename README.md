@@ -2,11 +2,11 @@ Mybatis01：Mybatis的常见用法
 
 Mybatis02：Mybatis的常见用法 + 配置文件
 
-Mybatis03：Mybatis的常见用法 + 配置文件 + 日志
+Mybatis03：Mybatis的常见用法 + 配置文件 + 日志   --> 可以直接看Mybatis03
 
-可以直接看Mybatis03
+Mybatis04-ResultMap:   resultMap的用法 -- 多对一查询
 
-
+Mybatis04-ResultMap:   resultMap的用法 -- 一对多查询
 
 教程链接：https://www.bilibili.com/video/BV1NE411Q7Nx?p=7
 
@@ -553,7 +553,9 @@ log4j.logger.java.sql.PreparedStatement = DEBUG
 
 
 
-### 一对多查询
+### 多对一查询
+
+DB数据创建
 
 ```sql
 CREATE DATABASE `mybatis`; 
@@ -578,31 +580,126 @@ CREATE TABLE `teacher`(
 INSERT INTO `teacher` (id, name) VALUES(1, 't1');
 ```
 
+实体类
 
+```java
+@Data
+public class Student {
+    private int id;
+    private String name;
+//    private Teacher teacher;  // 这种方式比较好实现
+    private String tname;
+}
 
-### 多对一查询
-
-
+@Data
+public class Teacher {
+    private int id;
+    private String name;
+}
+```
 
 - 按照查询嵌套处理
 
-```java
+  StudentMapper.xml
 
+```xml
+<select id="getStudentById" parameterType="int" resultMap="StudentMap">
+  SELECT * FROM mybatis.student WHERE id=#{id};
+</select>
+
+<resultMap id="StudentMap" type="student">
+  <result property="id" column="id"/>
+  <result property="name" column="name"/>
+  <association property="tname" column="tid" javaType="string"
+               select="com.yaohl0911.dao.TeacherMapper.getTeacherNameById"/>
+</resultMap>
 ```
 
+因为分两层查询，所以需要TeacherMapper
 
+TeacherMapper.xml
 
-
+```xml
+<select id="getTeacherNameById" parameterType="int" resultType="string">
+	select name from mybatis.teacher where id=#{id}
+</select>
+```
 
 - 按照结果嵌套处理
 
+  因使用了sql的关联查询能力，不再需要单独写TeacherMapper
 
+```xml
+<select id="getStudentById2" parameterType="int" resultMap="StudentMap2">
+  SELECT
+  	s.id as sid,
+  	s.name as sname,
+  	t.name as tname
+  FROM
+  	mybatis.student s
+  	left join mybatis.teacher t on s.tid = t.id
+  WHERE
+  	s.id=#{id};
+</select>
+<resultMap id="StudentMap2" type="student">
+  <result property="id" column="sid"/>
+  <result property="name" column="sname"/>
+  <association property="tname" javaType="string">
+    <result property="name" column="tname"/>
+  </association>
+</resultMap>
+```
 
+### 一对多查询
 
+DB内容与多对一查询完全一致，实体类有差异
 
+```java
+@Data
+public class Student {
+    private int id;
+    private String name;
+}
 
+@Data
+public class Teacher {
+    private int id;
+    private String name;
+    private List<String> students; //这里的list如果是Student的话很容易实现
+}
+```
 
+TeacherMapper.xml实现
 
+```xml
+<select id="getTeacherById" parameterType="int" resultMap="TeacherMap">
+  SELECT
+  	t.id as tid,
+  	t.name as tname,
+  	s.name as sname
+  FROM
+  	mybatis.student s
+  	left join mybatis.teacher t on s.tid = t.id
+  WHERE
+  	t.id=#{id};
+</select>
+
+<resultMap id="TeacherMap" type="com.yaohl0911.pojo.Teacher">
+  <result property="id" column="tid"/>
+  <result property="name" column="tname"/>
+  <!-- 注意：property="students"在idea中会被标红，这样是没问题的，不要被误导，它就是Teacher实体类里的第三个字段 -->
+  <!-- ofType就是这个字段的类型，result就是要取出的内容 -->
+  <collection property="students" ofType="string">
+    <result property="name" column="sname"/>
+  </collection>
+</resultMap>
+```
+
+返回结果：
+
+```bash
+Teacher(id=1, name=t1, students=[s1, s2, s3])
+```
 
 ## 分页的实现
 

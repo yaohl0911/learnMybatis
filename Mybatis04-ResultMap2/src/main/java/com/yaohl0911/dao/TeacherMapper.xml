@@ -10,9 +10,10 @@
             t.name as tname,
             s.name as sname
         FROM
-            mybatis.student s, mybatis.teacher t
+            mybatis.student s
+            left join mybatis.teacher t on s.tid = t.id
         WHERE
-            t.id=#{id} and s.tid=t.id;
+            t.id=#{id};
     </select>
     
     <resultMap id="TeacherMap" type="com.yaohl0911.pojo.Teacher">
